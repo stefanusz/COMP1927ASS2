@@ -22,7 +22,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 int getScore(HunterView currentView){
     int score;
     score = currentView -> score;
-    // GIT TEST 
+    
     return score;
 }  
 
@@ -47,13 +47,3 @@ void disposeHunterView( HunterView toBeDeleted ) {
     free( toBeDeleted );
 }
 
-// JUST TO TEST GIT HUB.
-int timePlayer ( HunterView tobeGone ){
-
-    int player, times, result;
-    
-    player = 0;
-    times = 100;
-    result = player * times;
-    
-}
