@@ -38,17 +38,18 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
            
         }
         counter++;
-        
     }
     
     for (i=0; i<totalPlay; i++) {
         printf ("[%d]", i);
         printf ("%s\n", finalPlay[i]);
     }
-    hunterView->score = calculateScore(finalPlay);
+    //hunterView->score = calculateScore(finalPlay);
     return hunterView;
 }
      
+//static int calculateScore (finalPlay);
+
 //Get the current score
 // Returns a positive integer [0...366]
 int getScore(HunterView currentView){
