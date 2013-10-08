@@ -9,6 +9,7 @@ typedef struct _hunterView {
     playerID player;
 }hunterView;
      
+// TETTST
 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
