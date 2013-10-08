@@ -5,6 +5,7 @@
 #include "game.h"
 #include "HunterView.h"
 
+// test
 
 int main(int argc, char * argv[]) {
 	playerMessage messages[] = {};
