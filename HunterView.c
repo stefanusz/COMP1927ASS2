@@ -22,7 +22,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 int getScore(HunterView currentView){
     int score;
     score = currentView -> score;
-    
+    // GIT TEST 
     return score;
 }  
 
