@@ -1,19 +1,51 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include "game.h"
 #include "HunterView.h"
+#include <string.h>
+
+#define PLAYLEN 7
      
-typedef struct _hunterView {
+struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int score;
-    playerID player;
-}hunterView;
+    PlayerID player;
+};
      
-
+//SPLIT STRING PLAY INTO 2D array with 7 chars. 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
-    HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->score = 366;
-    hunterView->player = -1;
+    HunterView hunterView = malloc( sizeof( *hunterView ) );
+    hunterView->score = GAME_START_SCORE;
+    hunterView->player = PLAYER_LORD_GODALMING;
+    
+    int i;
+    int totalPlay;
+    int counter;
+    
+    counter = 0;
+    totalPlay = strlen(pastPlays)/PLAYLEN;
+    char finalPlay[totalPlay][PLAYLEN+1];
+    
+    for(i=0; i<totalPlay; i++){
+        int j;
+        
+        for(j=0; j<PLAYLEN; j++){
+            
+            finalPlay[i][j] = pastPlays[counter];
+            finalPlay[i][7] = '\0';
+            counter++;
+           
+        }
+        counter++;
+        
+    }
+    
+    for (i=0; i<totalPlay; i++) {
+        printf ("[%d]", i);
+        printf ("%s\n", finalPlay[i]);
+    }
+    hunterView->score = calculateScore(finalPlay);
     return hunterView;
 }
      
@@ -22,7 +54,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 int getScore(HunterView currentView){
     int score;
     score = currentView -> score;
-    
     return score;
 }  
 
