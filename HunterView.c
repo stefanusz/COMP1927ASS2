@@ -46,3 +46,14 @@ void disposeHunterView( HunterView toBeDeleted ) {
     //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted );
 }
+
+// JUST TO TEST GIT HUB.
+int timePlayer ( HunterView tobeGone ){
+
+    int player, times, result;
+    
+    player = 0;
+    times = 100;
+    result = player * times;
+    
+}
