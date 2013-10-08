@@ -9,12 +9,6 @@ typedef struct _hunterView {
     playerID player;
 }hunterView;
      
-<<<<<<< HEAD
-     
-     //NEIL A TEST
-=======
-// TETTST
->>>>>>> 1eaef9af84673d9dad0c1abe9875913f79958225
 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
