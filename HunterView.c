@@ -20,27 +20,27 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->player = PLAYER_LORD_GODALMING;
     
     int i;
-    int totalPlay;
+    int totalTurns;
     int counter;
     
     counter = 0;
-    totalPlay = strlen(pastPlays)/PLAYLEN;
-    char finalPlay[totalPlay][PLAYLEN+1];
+    totalTurns = strlen(pastPlays)/PLAYLEN;
+    char finalPlay[totalTurns][PLAYLEN+1];
     
-    for(i=0; i<totalPlay; i++){
+    for(i=0; i<totalTurns; i++){
         int j;
         
         for(j=0; j<PLAYLEN; j++){
             
             finalPlay[i][j] = pastPlays[counter];
-            finalPlay[i][7] = '\0';
+            finalPlay[i][PLAYLEN] = '\0';
             counter++;
            
         }
         counter++;
     }
     
-    for (i=0; i<totalPlay; i++) {
+    for (i=0; i<totalTurns; i++) {
         printf ("[%d]", i);
         printf ("%s\n", finalPlay[i]);
     }
