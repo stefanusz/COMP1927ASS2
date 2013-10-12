@@ -18,6 +18,12 @@ struct hunterView {
     
 };
 
+// #    #  ######  #    # #     #  #    #  #    #   #####  ######  #####
+// ##   #  #       #    # #     #  #    #  ##   #     #    #       #    #
+// # #  #  #####   #    # #######  #    #  # #  #     #    #####   #    #
+// #  # #  #       # ## # #     #  #    #  #  # #     #    #       #####
+// #   ##  #       ##  ## #     #  #    #  #   ##     #    #       #   #
+// #    #  ######  #    # #     #   ####   #    #     #    ######  #    #
 //SPLIT STRING PLAY INTO 2D array with 7 chars. 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( *hunterView ) );
@@ -65,6 +71,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 
 //static int calculateScore (finalPlay);
 
+
+//                         #####
+//  ####   ######   ##### #     #   ####    ####   #####   ######
+// #    #  #          #   #        #    #  #    #  #    #  #
+// #       #####      #    #####   #       #    #  #    #  #####
+// #  ###  #          #         #  #       #    #  #####   #
+// #    #  #          #   #     #  #    #  #    #  #   #   #
+//  ####   ######     #    #####    ####    ####   #    #  ######
 //Get the current score
 // Returns a positive integer [0...366]
 int getScore(HunterView currentView){
@@ -72,6 +86,14 @@ int getScore(HunterView currentView){
     score = currentView -> score;
     return score;
 }  
+
+// #####                          ######
+//#     #  #    #  #####   #####  #     #  #         ##     #   #  ######  #####
+//#        #    #  #    #  #    # #     #  #        #  #     # #   #       #    #
+//#        #    #  #    #  #    # ######   #       #    #     #    #####   #    #
+//#        #    #  #####   #####  #        #       ######     #    #       #####
+//#     #  #    #  #   #   #   #  #        #       #    #     #    #       #   #
+// #####    ####   #    #  #    # #        ######  #    #     #    ######  #    #
 
 //Get the id of current player - ie whose turn is it?
 // Only returns a 'playerID' which is one of:
@@ -97,6 +119,13 @@ PlayerID getCurrentPlayer (HunterView currentView){
         return PLAYER_LORD_GODALMING;
     }
 }
+
+// #####      #     ####   #####    ####    ####   ######
+// #    #     #    #       #    #  #    #  #       #
+// #    #     #     ####   #    #  #    #   ####   #####
+// #    #     #         #  #####   #    #       #  #
+// #    #     #    #    #  #       #    #  #    #  #
+// #####      #     ####   #        ####    ####   ######
      
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
