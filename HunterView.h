@@ -89,7 +89,6 @@ int getScore(HunterView currentView);
 //Get the current health points for a given player
 // 'player' specifies which players's life/blood points to return
 //    and must be a value in the interval [0...4] (see 'player' type)
-
 int getHealth(HunterView currentView, PlayerID player);
 
 // Get the current location id of a given player

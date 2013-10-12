@@ -71,7 +71,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 
 //static int calculateScore (finalPlay);
 
-
 //                         #####
 //  ####   ######   ##### #     #   ####    ####   #####   ######
 // #    #  #          #   #        #    #  #    #  #    #  #
@@ -85,15 +84,86 @@ int getScore(HunterView currentView){
     int score;
     score = currentView -> score;
     return score;
-}  
+}
+
+
+//  ####   ######   #####  #    #  ######    ##    #        #####  #    #
+// #    #  #          #    #    #  #        #  #   #          #    #    #
+// #       #####      #    ######  #####   #    #  #          #    ######
+// #  ###  #          #    #    #  #       ######  #          #    #    #
+// #    #  #          #    #    #  #       #    #  #          #    #    #
+//  ####   ######     #    #    #  ######  #    #  ######     #    #    #
+
+//Get the current health points for a given player
+// 'player' specifies which players's life/blood points to return
+//    and must be a value in the interval [0...4] (see 'player' type)
+int getHealth(HunterView currentView, PlayerID player) {
+
+    int i,k;
+    int health;
+    char encounter;
+    char location[3];
+    char pastLocation[3] = "";
+    location[2] = '\0';
+
+    Round roundsPlayed = getRound(currentView);
+    if (currentView->totalTurns % 5 > player)
+        roundsPlayed++;
+
+    // HUNTERS
+    if (player >= 0 && player <= 3) {
+        health = GAME_START_HUNTER_LIFE_POINTS;
+
+        // loop through all the plays for the specified player
+        for (i = 0; i < roundsPlayed; i++) {
+
+            // store the previous location of the hunter
+            if (roundsPlayed >= 2)
+                strcpy(pastLocation, location);
+
+            location[0] = currentView->seperatedPP[(i*5)+player][1];
+            location[1] = currentView->seperatedPP[(i*5)+player][2];
+
+            // check if hunter is in the hospital and reset hp if true
+            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS) {
+                health = GAME_START_HUNTER_LIFE_POINTS;
+            }
+
+            // if the hunter hasn't moved
+            if (strcmp(location, pastLocation) == 0) {
+                if (health <= 6) {
+                    health += 3;
+                } else {
+                    health = GAME_START_HUNTER_LIFE_POINTS;
+                }
+            }
+
+            // loop through all four characters  at the end of the playstring
+            for (k = 3; k <= 6; k++) {
+                encounter = currentView->seperatedPP[(i*5)+player][k];
+                if (encounter == 'T') {
+                    health -= LIFE_LOSS_TRAP_ENCOUNTER;
+                if (encounter == 'D')
+                    health -= LIFE_LOSS_DRACULA_ENCOUNTER;
+            }
+        }
+    }
+
+    // DRACULA
+    if (player == 4) {
+        return 40;
+    }
+    return health;
+
+}
 
 // #####                          ######
-//#     #  #    #  #####   #####  #     #  #         ##     #   #  ######  #####
-//#        #    #  #    #  #    # #     #  #        #  #     # #   #       #    #
-//#        #    #  #    #  #    # ######   #       #    #     #    #####   #    #
-//#        #    #  #####   #####  #        #       ######     #    #       #####
-//#     #  #    #  #   #   #   #  #        #       #    #     #    #       #   #
-// #####    ####   #    #  #    # #        ######  #    #     #    ######  #    #
+//#     #  #    #  #####   #####  #     #  #         ##     #   #   #####
+//#        #    #  #    #  #    # #     #  #        #  #     # #    #    #
+//#        #    #  #    #  #    # ######   #       #    #     #     #    #
+//#        #    #  #####   #####  #        #       ######     #     #####
+//#     #  #    #  #   #   #   #  #        #       #    #     #     #   #
+// #####    ####   #    #  #    # #        ######  #    #     #     #    #
 
 //Get the id of current player - ie whose turn is it?
 // Only returns a 'playerID' which is one of:
@@ -132,6 +202,13 @@ void disposeHunterView( HunterView toBeDeleted ) {
     free( toBeDeleted );
 }
 
+
+//   ####   ######   #####  #####    ####   #    #  #    #  #####
+//  #    #  #          #    #    #  #    #  #    #  ##   #  #    #
+//  #       #####      #    #    #  #    #  #    #  # #  #  #    #
+//  #  ###  #          #    #####   #    #  #    #  #  # #  #    #
+//  #    #  #          #    #   #   #    #  #    #  #   ##  #    #
+//   ####   ######     #    #    #   ####    ####   #    #  #####
 //Get the current round
 Round getRound (HunterView currentView) {
     return currentView->totalTurns/5;
@@ -253,6 +330,15 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
     }
 
 }
+
+
+
+//#####  #####     ##    #    #   ####   #         ##     #####  ######
+//  #    #    #   #  #   ##   #  #       #        #  #      #    #
+//  #    #    #  #    #  # #  #   ####   #       #    #     #    #####
+//  #    #####   ######  #  # #       #  #       ######     #    #
+//  #    #   #   #    #  #   ##  #    #  #       #    #     #    #
+//  #    #    #  #    #  #    #   ####   ######  #    #     #    ######
 
 static LocationID translateLocationID (char* locationCode) {
     // ==== "Ci"ties ====
