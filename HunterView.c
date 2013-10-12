@@ -30,7 +30,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->player = PLAYER_LORD_GODALMING;
 
     int i;
-    int k;
     int counter;
     
     counter = 0;
@@ -45,9 +44,9 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     assert(hunterView->seperatedPP != NULL);
 
     // Intialise a string for every turn
-    for(k = 0; k < hunterView->totalTurns; k++) {
-        hunterView->seperatedPP[k] = malloc(sizeof(char));
-        assert(hunterView->seperatedPP[k] != NULL);
+    for(i = 0; i < hunterView->totalTurns; i++) {
+        hunterView->seperatedPP[i] = malloc(sizeof(char));
+        assert(hunterView->seperatedPP[i] != NULL);
     }
 
     for(i=0; i<hunterView->totalTurns; i++){
@@ -135,3 +134,7 @@ void disposeHunterView( HunterView toBeDeleted ) {
     free( toBeDeleted );
 }
 
+//Get the current round
+Round getRound (HunterView currentView) {
+    return currentView->totalTurns/5;
+}
