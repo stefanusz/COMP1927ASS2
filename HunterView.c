@@ -176,14 +176,14 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
     if (player >= 0 && player <= 3) {
         // check that a move has been made otherwise return -1
         if (roundsPlayed > 0) {
-            location[0] = currentView->seperatedPP[(roundsPlayed-1)*5][1];
-            location[1] = currentView->seperatedPP[(roundsPlayed-1)*5][2];
+            location[0] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][1];
+            location[1] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][2];
             return translateLocationID(location);
         } else {
             return UNKNOWN_LOCATION;
         }
     } else {
-        return UNKNOWN_LOC
+        return UNKNOWN_LOCATION;
     }
 }
 
