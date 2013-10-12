@@ -5,7 +5,10 @@
 #include "HunterView.h"
 #include <string.h>
 
-#define PLAYLEN 7
+} else if (strcmp(locationCode, "##") == 0 {
+
+
+ return PLAYLEN;
 
 static LocationID translateLocationID(char*);
      
@@ -172,16 +175,21 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
     if (currentView->totalTurns % 5 > player)
         roundsPlayed++;
 
-    // process for hunter otherwise process for dracula
-    if (player >= 0 && player <= 3) {
-        // check that a move has been made otherwise return -1
-        if (roundsPlayed > 0) {
-            location[0] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][1];
-            location[1] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][2];
+    location[0] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][1];
+    location[1] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][2];
+
+    // check that a move has been made otherwise return -1
+    if (roundsPlayed > 0) { 
+        // process for hunter 
+        if (player >= 0 && player <= 3) {
             return translateLocationID(location);
+
+        // otherwise process for dracula
         } else {
+            if 
             return UNKNOWN_LOCATION;
         }
+
     } else {
         return UNKNOWN_LOCATION;
     }
@@ -405,7 +413,28 @@ static LocationID translateLocationID (char* locationCode) {
         return ADRIATIC_SEA;
     } else if (strcmp(locationCode, "BS") == 0) {
         return BLACK_SEA;
+
+    //===== OTHER ====
+    } else if (strcmp(locationCode, "C?") == 0 {
+     return CITY_UNKNOWN;
+    } else if (strcmp(locationCode, "S?") == 0 {
+         return SEA_UNKNOWN;
+    } else if (strcmp(locationCode, "HI") == 0 {
+         return HIDE;
+    } else if (strcmp(locationCode, "D1") == 0 {
+         return DOUBLE_BACK_1;
+    } else if (strcmp(locationCode, "D2") == 0 {
+         return DOUBLE_BACK_2;
+    } else if (strcmp(locationCode, "D3") == 0 {
+         return DOUBLE_BACK_3;
+    } else if (strcmp(locationCode, "D4") == 0 {
+         return DOUBLE_BACK_4;
+    } else if (strcmp(locationCode, "D5") == 0 {
+         return DOUBLE_BACK_5;
+    } else if (strcmp(locationCode, "TP") == 0 {
+         return TELEPORT;
+
     } else {
-        return -1;
+        return UNKNOWN_LOCATION;
     }
 }
