@@ -103,15 +103,15 @@ int getScore(HunterView currentView){
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView){
-    char currentPlayer = currentView->seperatedPP[currentView->totalTurns-1][0];
-    printf("currentPlayer = *%c*\n", currentPlayer);
-    if (currentPlayer == 'G') {
+    char lastPlayer = currentView->seperatedPP[currentView->totalTurns-1][0];
+    printf("lastPlayer = *%c*\n", lastPlayer);
+    if (lastPlayer == 'G') {
         return PLAYER_DR_SEWARD;
-    } else if (currentPlayer == 'S') {
+    } else if (lastPlayer == 'S') {
         return PLAYER_VAN_HELSING;
-    } else if (currentPlayer == 'H') {
+    } else if (lastPlayer == 'H') {
         return PLAYER_MINA_HARKER;
-    } else if (currentPlayer == 'M') {
+    } else if (lastPlayer == 'M') {
         return PLAYER_DRACULA;
     } else {
         return PLAYER_LORD_GODALMING;
@@ -180,8 +180,10 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
             location[1] = currentView->seperatedPP[(roundsPlayed-1)*5][2];
             return translateLocationID(location);
         } else {
-            return LOCATION_UNKNOWN;
+            return UNKNOWN_LOCATION;
         }
+    } else {
+        return UNKNOWN_LOC
     }
 }
 
