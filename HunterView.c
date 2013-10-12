@@ -168,22 +168,32 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
         trail[i] = -1;
     }
 
-    Round currentRound = getRound(currentView);
+    // 
+    Round roundsPlayed = getRound(currentView);
     if (currentView->totalTurns%5 > player) {
-        currentRound++;
+        roundsPlayed++;
     }
-    printf("totalround = %d\n", currentRound);
+    printf("totalround = %d\n", roundsPlayed);
 
-    if (currentRound > 0) {
-        for(i=0; i < currentRound; i++) {
-            printf("round = %d, playerid = %d weee = %d\n", i, player, (((currentRound-1)*5)-(i*5))+player);
-            location[0] = currentView->seperatedPP[(((currentRound-1)*5)-(i*5))+player][1];
-            location[1] = currentView->seperatedPP[(((currentRound-1)*5)-(i*5))+player][2];
+    if (roundsPlayed > 0 && roundsPlayed <= 5) {
+        for(i=0; i < roundsPlayed; i++) {
+            printf("round = %d, playerid = %d weee = %d\n", i, player, (((roundsPlayed-1)*5)-(i*5))+player);
+            location[0] = currentView->seperatedPP[(((roundsPlayed-1)*5)-(i*5))+player][1];
+            location[1] = currentView->seperatedPP[(((roundsPlayed-1)*5)-(i*5))+player][2];
             trail[i] = translateLocationID(location);
             printf("location = **%s**\n", location);
         }
+    } else if (roundsPlayed >= 6) {
+        int start = roundsPlayed*5;
+        for(i=TRAIL_SIZE; i > 0; i--) {
+            printf("round = %d, playerid = %d weee = %d\n", i, player, (start-(i*5)));
+            location[0] = currentView->seperatedPP[start-(i*5)][1];
+            location[1] = currentView->seperatedPP[start-(i*5)][2];
+            trail[i-1] = translateLocationID(location);
+            printf("location = **%s**\n", location);
+        }
     }
-    
+
     for (i=0; i<TRAIL_SIZE; i++) {
         printf("history [%d] = %d\n", i, trail[i]);
     }
