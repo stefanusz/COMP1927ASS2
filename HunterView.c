@@ -191,3 +191,155 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
     }
 
 }
+
+static LocationID translateLocationID (char* locationCode) {
+    // ==== "Ci"ties ====
+    if (strcmp(locationCode, "AL") == 0) {
+        return ALICANTE;
+    } else if (strcmp(locationCode, "AM") == 0) {
+        return AMSTERDAM;
+    } else if (strcmp(locationCode, "AT") == 0) {
+        return ATHENS;
+    } else if (strcmp(locationCode, "BA") == 0) {
+        return BARCELONA;
+    } else if (strcmp(locationCode, "BI") == 0) {
+        return BARI;
+    } else if (strcmp(locationCode, "BE") == 0) {
+        return BELGRADE;
+    } else if (strcmp(locationCode, "BR") == 0) {
+        return BERLIN;
+    } else if (strcmp(locationCode, "BO") == 0) {
+        return BORDEAUX;
+    } else if (strcmp(locationCode, "BU") == 0) {
+        return BRUSSELS;
+    } else if (strcmp(locationCode, "BC") == 0) {
+        return BUCHAREST;
+    } else if (strcmp(locationCode, "BD") == 0) {
+        return BUDAPEST;
+    } else if (strcmp(locationCode, "CA") == 0) {
+        return CADIZ;
+    } else if (strcmp(locationCode, "CG") == 0) {
+        return CAGLIARI;
+    } else if (strcmp(locationCode, "CD") == 0) {
+        return CASTLE_DRACULA;
+    } else if (strcmp(locationCode, "CF") == 0) {
+        return CLERMONT_FERRAND;
+    } else if (strcmp(locationCode, "CO") == 0) {
+        return COLOGNE;
+    } else if (strcmp(locationCode, "CN") == 0) {
+        return CONSTANTA;
+    } else if (strcmp(locationCode, "DU") == 0) {
+        return DUBLIN;
+    } else if (strcmp(locationCode, "ED") == 0) {
+        return EDINBURGH;
+    } else if (strcmp(locationCode, "FL") == 0) {
+        return FLORENCE;
+    } else if (strcmp(locationCode, "FR") == 0) {
+        return FRANKFURT;
+    } else if (strcmp(locationCode, "GA") == 0) {
+        return GALATZ;
+    } else if (strcmp(locationCode, "GW") == 0) {
+        return GALWAY;
+    } else if (strcmp(locationCode, "GE") == 0) {
+        return GENEVA;
+    } else if (strcmp(locationCode, "GO") == 0) {
+        return GENOA;
+    } else if (strcmp(locationCode, "GR") == 0) {
+        return GRANADA;
+    } else if (strcmp(locationCode, "HA") == 0) {
+        return HAMBURG;
+    } else if (strcmp(locationCode, "JM") == 0) {
+        return ST_JOSEPH_AND_ST_MARYS;
+    } else if (strcmp(locationCode, "KL") == 0) {
+        return KLAUSENBURG;
+    } else if (strcmp(locationCode, "LE") == 0) {
+        return LE_HAVRE;
+    } else if (strcmp(locationCode, "LI") == 0) {
+        return LEIPZIG;
+    } else if (strcmp(locationCode, "LS") == 0) {
+        return LISBON;
+    } else if (strcmp(locationCode, "LV") == 0) {
+        return LIVERPOOL;
+    } else if (strcmp(locationCode, "LO") == 0) {
+        return LONDON;
+    } else if (strcmp(locationCode, "MA") == 0) {
+        return MADRID;
+    } else if (strcmp(locationCode, "MN") == 0) {
+        return MANCHESTER;
+    } else if (strcmp(locationCode, "MR") == 0) {
+        return MARSEILLES;
+    } else if (strcmp(locationCode, "MI") == 0) {
+        return MILAN;
+    } else if (strcmp(locationCode, "MU") == 0) {
+        return MUNICH;
+    } else if (strcmp(locationCode, "NA") == 0) {
+        return NANTES;
+    } else if (strcmp(locationCode, "NP") == 0) {
+        return NAPLES;
+    } else if (strcmp(locationCode, "NU") == 0) {
+        return NUREMBURG;
+    } else if (strcmp(locationCode, "PA") == 0) {
+        return PARIS;
+    } else if (strcmp(locationCode, "PL") == 0) {
+        return PLYMOUTH;
+    } else if (strcmp(locationCode, "PR") == 0) {
+        return PRAGUE;
+    } else if (strcmp(locationCode, "RO") == 0) {
+        return ROME;
+    } else if (strcmp(locationCode, "SA") == 0) {
+        return SALONICA;
+    } else if (strcmp(locationCode, "SN") == 0) {
+        return SANTANDER;
+    } else if (strcmp(locationCode, "SR") == 0) {
+        return SARAGOSSA;
+    } else if (strcmp(locationCode, "SJ") == 0) {
+        return SARAJEVO;
+    } else if (strcmp(locationCode, "SO") == 0) {
+        return SOFIA;
+    } else if (strcmp(locationCode, "ST") == 0) {
+        return STRASBOURG;
+    } else if (strcmp(locationCode, "SW") == 0) {
+        return SWANSEA;
+    } else if (strcmp(locationCode, "SZ") == 0) {
+        return SZEGED;
+    } else if (strcmp(locationCode, "TO") == 0) {
+        return TOULOUSE;
+    } else if (strcmp(locationCode, "VA") == 0) {
+        return VALONA;
+    } else if (strcmp(locationCode, "VR") == 0) {
+        return VARNA;
+    } else if (strcmp(locationCode, "VE") == 0) {
+        return VENICE;
+    } else if (strcmp(locationCode, "VI") == 0) {
+        return VIENNA;
+    } else if (strcmp(locationCode, "ZA") == 0) {
+        return ZAGREB;
+    } else if (strcmp(locationCode, "ZU") == 0) {
+        return ZURICH;
+     
+
+    //==== "SE"AS ====
+    } else if (strcmp(locationCode, "NS") == 0) {
+        return NORTH_SEA;
+    } else if (strcmp(locationCode, "EC") == 0) {
+        return ENGLISH_CHANNEL;
+    } else if (strcmp(locationCode, "IS") == 0) {
+        return IRISH_SEA;
+    } else if (strcmp(locationCode, "AO") == 0) {
+        return ATLANTIC_OCEAN;
+    } else if (strcmp(locationCode, "BB") == 0) {
+        return BAY_OF_BISCAY;
+    } else if (strcmp(locationCode, "MS") == 0) {
+        return MEDITERRANEAN_SEA;
+    } else if (strcmp(locationCode, "TS") == 0) {
+        return TYRRHENIAN_SEA;
+    } else if (strcmp(locationCode, "IO") == 0) {
+        return IONIAN_SEA;
+    } else if (strcmp(locationCode, "AS") == 0) {
+        return ADRIATIC_SEA;
+    } else if (strcmp(locationCode, "BS") == 0) {
+        return BLACK_SEA;
+    } else {
+        return -1;
+    }
+}
