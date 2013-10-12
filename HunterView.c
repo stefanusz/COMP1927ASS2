@@ -158,6 +158,8 @@ Round getRound (HunterView currentView) {
 // then moved to the current location of 29
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
     int i;
+
+    // array to store the 2 letter id pulled from pastplays
     char location[3];
     location[2] = '\0';
 
@@ -167,25 +169,21 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
     }
 
     Round currentRound = getRound(currentView);
+    if (currentView->totalTurns%5 > player) {
+        currentRound++;
+    }
     printf("totalround = %d\n", currentRound);
 
     if (currentRound > 0) {
-        for(i=0; i < getRound(currentView); i++) {
-            printf("round = %d, playerid = %d\n", i, player);
-            location[0] = currentView->seperatedPP[(i*5)+player][1];
-            location[1] = currentView->seperatedPP[(i*5)+player][2];
-            trail[i] = translateLocationID(location);
-            printf("location = **%s**\n", location);
-        }
-        if (currentView->totalTurns%5 > player) {
-            printf("round = %d, playerid = %d\n", i, player);
-            location[0] = currentView->seperatedPP[(i*5)+player][1];
-            location[1] = currentView->seperatedPP[(i*5)+player][2];
+        for(i=0; i < currentRound; i++) {
+            printf("round = %d, playerid = %d weee = %d\n", i, player, (((currentRound-1)*5)-(i*5))+player);
+            location[0] = currentView->seperatedPP[(((currentRound-1)*5)-(i*5))+player][1];
+            location[1] = currentView->seperatedPP[(((currentRound-1)*5)-(i*5))+player][2];
             trail[i] = translateLocationID(location);
             printf("location = **%s**\n", location);
         }
     }
-
+    
     for (i=0; i<TRAIL_SIZE; i++) {
         printf("history [%d] = %d\n", i, trail[i]);
     }
