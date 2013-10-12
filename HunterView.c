@@ -137,6 +137,14 @@ Round getRound (HunterView currentView) {
     return currentView->totalTurns/5;
 }
 
+
+//  ####   ######   ##### #     #     #     ####    #####   ####   #####    #   #
+// #    #  #          #   #     #     #    #          #    #    #  #    #    # #
+// #       #####      #   #######     #     ####      #    #    #  #    #     #
+// #  ###  #          #   #     #     #         #     #    #    #  #####      #
+// #    #  #          #   #     #     #    #    #     #    #    #  #   #      #
+//  ####   ######     #   #     #     #     ####      #     ####   #    #     #
+
 // Fills the trail array with the location ids of the last 6 turns for the given player
 // For dracula this may include integers:
 //   in the interval [0...70] if Dracula was known to be in a city or sea
