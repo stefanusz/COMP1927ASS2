@@ -11,7 +11,10 @@ struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int score;
     PlayerID player;
-    int totalTurns;
+    // stores the total amount of turns that have occured within the game
+    int totalTurns; 
+    // all the pastPlays(PP) seperated, so that they can be individually accessed through the array
+    char seperatedPP[totalTurns][PLAYLEN+1]; 
 };
      
 //SPLIT STRING PLAY INTO 2D array with 7 chars. 
@@ -25,23 +28,25 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     
     counter = 0;
     hunterView->totalTurns = strlen(pastPlays)/PLAYLEN;
-    char finalPlay[hunterView->totalTurns][PLAYLEN+1];
+    
     
     for(i=0; i<hunterView->totalTurns; i++){
 
         int j;
         for(j=0; j<PLAYLEN; j++){
             
-            finalPlay[i][j] = pastPlays[counter];
+            hunterView->seperatedPP[i][j] = pastPlays[counter];
             counter++;
         }
-        finalPlay[i][PLAYLEN] = '\0';
+        hunterView->seperatedPP[i][PLAYLEN] = '\0';
         counter++;
     }
     
     for (i=0; i<hunterView->totalTurns; i++) {
-        printf ("[%d] %s\n", i, finalPlay[i]);
+        printf ("[%d] %s\n", i, hunterView->seperatedPP[i]);
     }
+
+    printf("total turns = %d\n", hunterView->totalTurns);
     //hunterView->score = calculateScore(finalPlay);
     return hunterView;
 }
