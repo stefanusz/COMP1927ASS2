@@ -33,8 +33,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     int counter;
     
     counter = 0;
-    int len = strlen(pastPlays);
-    printf("strlen = %d\n", len);
     hunterView->totalTurns = (strlen(pastPlays)+1)/(PLAYLEN+1);
     
     // Initialise the 2D array of strings
@@ -64,8 +62,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     for (i=0; i<hunterView->totalTurns; i++) {
         printf ("[%d]*%s*\n", i, hunterView->seperatedPP[i]);
     }
-
-    printf("total turns = %d\n", hunterView->totalTurns);
 
     //hunterView->score = calculateScore(finalPlay);
     return hunterView;
