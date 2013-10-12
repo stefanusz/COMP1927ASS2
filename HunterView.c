@@ -137,6 +137,54 @@ Round getRound (HunterView currentView) {
     return currentView->totalTurns/5;
 }
 
+// #        ####    ####     ##     #####     #     ####   #    #
+// #       #    #  #    #   #  #      #       #    #    #  ##   #
+// #       #    #  #       #    #     #       #    #    #  # #  #
+// #       #    #  #       ######     #       #    #    #  #  # #
+// #       #    #  #    #  #    #     #       #    #    #  #   ##
+// ######   ####    ####   #    #     #       #     ####   #    #
+
+// Get the current location id of a given player
+// May be UNKNOWN_LOCATION if the player has not had a turn yet
+// (ie at the beginning of the game when the round is 0)
+// otherwise for a hunter it should be an integer in the interval [0..70] 
+// The given roundNumber is >= 0 and <= the current round number
+// 'whichHunter' specifies which hunter's location to return
+//    and must be a value in the interval [0...3] (see 'player' type)
+// Or for dracula it should 
+// gets the location of Dracula at the start of a particular round
+// Returns an integer:
+//   in the interval [0...70] if Dracula was known to be in a city or sea
+//   CITY_UNKNOWN     if Dracula was in an unknown city
+//   SEA_UNKNOWN      if Dracula was in an unknown sea
+//   HIDE             if Dracula was known to have made a hide move
+//   DOUBLE_BACK_N    where N is [0...5], if Dracula was known to have 
+//                    made a double back move N positions back in the trail
+//                    e.g. DOUBLE_BACK_1 is the last place place he visited
+//   TELEPORT         if Dracula apparated back to Castle Dracula
+//   LOCATION_UNKNOWN if the round number is 0
+LocationID getLocation(HunterView currentView, PlayerID player) {
+
+    char location[3];
+    location[2] = '\0';
+
+    Round roundsPlayed = getRound(currentView);
+    if (currentView->totalTurns % 5 > player)
+        roundsPlayed++;
+
+    // process for hunter otherwise process for dracula
+    if (player >= 0 && player <= 3) {
+        // check that a move has been made otherwise return -1
+        if (roundsPlayed > 0) {
+            location[0] = currentView->seperatedPP[(roundsPlayed-1)*5][1];
+            location[1] = currentView->seperatedPP[(roundsPlayed-1)*5][2];
+            return translateLocationID(location);
+        } else {
+            return LOCATION_UNKNOWN;
+        }
+    }
+}
+
 
 //  ####   ######   ##### #     #     #     ####    #####   ####   #####    #   #
 // #    #  #          #   #     #     #    #          #    #    #  #    #    # #
@@ -334,7 +382,7 @@ static LocationID translateLocationID (char* locationCode) {
         return ZURICH;
      
 
-    //==== "SE"AS ====
+    //==== SEAS ====
     } else if (strcmp(locationCode, "NS") == 0) {
         return NORTH_SEA;
     } else if (strcmp(locationCode, "EC") == 0) {
