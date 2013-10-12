@@ -110,7 +110,9 @@ int getHealth(HunterView currentView, PlayerID player) {
     if (currentView->totalTurns % 5 > player)
         roundsPlayed++;
 
-    // HUNTERS
+    // ================================================ 
+    //                   HUNTERS
+    // ================================================
     if (player >= 0 && player <= 3) {
         health = GAME_START_HUNTER_LIFE_POINTS;
 
@@ -125,9 +127,8 @@ int getHealth(HunterView currentView, PlayerID player) {
             location[1] = currentView->seperatedPP[(i*5)+player][2];
 
             // check if hunter is in the hospital and reset hp if true
-            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS) {
+            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS)
                 health = GAME_START_HUNTER_LIFE_POINTS;
-            }
 
             // if the hunter hasn't moved
             if (strcmp(location, pastLocation) == 0) {
@@ -149,7 +150,9 @@ int getHealth(HunterView currentView, PlayerID player) {
         }
     }
 
-    // DRACULA
+    // ================================================
+    //                   DRACULA
+    // ================================================
     if (player == 4) {
         return 40;
     }
