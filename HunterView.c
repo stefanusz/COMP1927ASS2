@@ -15,7 +15,6 @@ struct hunterView {
     int totalTurns; 
     // all the pastPlays(PP) seperated, so that they can be individually accessed through the array
     char** seperatedPP;
-    
 };
 
 // #    #  ######  #    # #     #  #    #  #    #   #####  ######  #####
@@ -30,11 +29,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->score = GAME_START_SCORE;
     hunterView->player = PLAYER_LORD_GODALMING;
 
-    int i,k;
+    int i;
+    int k;
     int counter;
     
     counter = 0;
-    hunterView->totalTurns = strlen(pastPlays)/PLAYLEN;
+    int len = strlen(pastPlays);
+    printf("strlen = %d\n", len);
+    hunterView->totalTurns = (strlen(pastPlays)+1)/(PLAYLEN+1);
     
     // Initialise the 2D array of strings
     // http://stackoverflow.com/a/14583642
@@ -44,7 +46,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 
     // Intialise a string for every turn
     for(k = 0; k < hunterView->totalTurns; k++) {
-        hunterView->seperatedPP[k] = malloc((PLAYLEN+1)*sizeof(char));
+        hunterView->seperatedPP[k] = malloc(sizeof(char));
         assert(hunterView->seperatedPP[k] != NULL);
     }
 
@@ -56,15 +58,16 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
             hunterView->seperatedPP[i][j] = pastPlays[counter];
             counter++;
         }
-        hunterView->seperatedPP[i][PLAYLEN] = '\0';
+        //hunterView->seperatedPP[i][PLAYLEN] = '\0';
         counter++;
     }
     
     for (i=0; i<hunterView->totalTurns; i++) {
-        printf ("[%d] %s\n", i, hunterView->seperatedPP[i]);
+        printf ("[%d]*%s*\n", i, hunterView->seperatedPP[i]);
     }
 
     printf("total turns = %d\n", hunterView->totalTurns);
+
     //hunterView->score = calculateScore(finalPlay);
     return hunterView;
 }
@@ -103,19 +106,17 @@ int getScore(HunterView currentView){
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView){
-
-    PlayerID currentPlayer = PLAYER_LORD_GODALMING;
-    char currentPlayer = currentView->seperatedPP[0][currentView->totalTurns-1];
-    //printf("currentPlayer = *%c*\n", currentPlayer);
+    char currentPlayer = currentView->seperatedPP[currentView->totalTurns-1][0];
+    printf("currentPlayer = *%c*\n", currentPlayer);
     if (currentPlayer == 'G') {
-        return PLAYER_SEWARD;
+        return PLAYER_DR_SEWARD;
     } else if (currentPlayer == 'S') {
         return PLAYER_VAN_HELSING;
     } else if (currentPlayer == 'H') {
-        return PLAYER_MINA_HAKER;
+        return PLAYER_MINA_HARKER;
     } else if (currentPlayer == 'M') {
         return PLAYER_DRACULA;
-    } else if (currentPlayer == 'D') {
+    } else {
         return PLAYER_LORD_GODALMING;
     }
 }
