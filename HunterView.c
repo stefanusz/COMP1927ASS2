@@ -7,7 +7,7 @@
 
 #define PLAYLEN 7
 
-static LocationID translateLocationID(char*);
+static LocationID translateLocationID(char* locationCode);
      
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
@@ -127,11 +127,13 @@ int getHealth(HunterView currentView, PlayerID player) {
             location[1] = currentView->seperatedPP[(i*5)+player][2];
 
             // check if hunter is in the hospital and reset hp if true
-            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS)
+            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS) {
                 health = GAME_START_HUNTER_LIFE_POINTS;
+            }
 
-            // if the hunter hasn't moved
+            // if the hunter hasn't moved, health += 3
             if (strcmp(location, pastLocation) == 0) {
+                // hunters can't exceed 9 health
                 if (health <= 6) {
                     health += 3;
                 } else {
@@ -142,7 +144,7 @@ int getHealth(HunterView currentView, PlayerID player) {
             // loop through all four characters  at the end of the playstring
             for (k = 3; k <= 6; k++) {
                 encounter = currentView->seperatedPP[(i*5)+player][k];
-                if (encounter == 'T') {
+                if (encounter == 'T')
                     health -= LIFE_LOSS_TRAP_ENCOUNTER;
                 if (encounter == 'D')
                     health -= LIFE_LOSS_DRACULA_ENCOUNTER;
@@ -153,8 +155,35 @@ int getHealth(HunterView currentView, PlayerID player) {
     // ================================================
     //                   DRACULA
     // ================================================
-    if (player == 4) {
-        return 40;
+    if (player == PLAYER_DRACULA) {
+        health = GAME_START_BLOOD_POINTS;
+
+        // loop through all the plays for the specified player
+        for (i = 0; i < roundsPlayed; i++) {
+
+            // store the location
+            location[0] = currentView->seperatedPP[(i*5)+player][1];
+            location[1] = currentView->seperatedPP[(i*5)+player][2];
+
+            LocationID locDracula = translateLocationID(location);
+
+            // Reduce health by 10 if a hunter was encountered
+            if (locDracula >= 0 && locDracula <= 70 && locDracula != CASTLE_DRACULA) {
+                health -= LIFE_LOSS_HUNTER_ENCOUNTER;
+            }
+
+            // Reduce health by 2 if at sea
+            if ((locDracula >= 61 && locDracula <= 70) 
+            || (locDracula == 72)) {
+                health -= LIFE_LOSS_SEA;
+            }
+
+            // Increase health by 10 if Dracula is at castle
+            if (locDracula == CASTLE_DRACULA) {
+                health += LIFE_GAIN_CASTLE_DRACULA;
+            }
+
+        }
     }
     return health;
 
@@ -344,7 +373,7 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //  #    #    #  #    #  #    #   ####   ######  #    #     #    ######
 
 static LocationID translateLocationID (char* locationCode) {
-    // ==== "Ci"ties ====
+    // ==== Cities ====
     if (strcmp(locationCode, "AL") == 0) {
         return ALICANTE;
     } else if (strcmp(locationCode, "AM") == 0) {
