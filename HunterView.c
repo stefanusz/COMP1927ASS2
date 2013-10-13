@@ -299,18 +299,19 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
     if (currentView->died[player] == TRUE)
         return ST_JOSEPH_AND_ST_MARYS;
 
-    char location[3];
-    location[2] = '\0';
-
     Round roundsPlayed = getRound(currentView);
     if (currentView->totalTurns % 5 > player)
         roundsPlayed++;
 
-    location[0] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][1];
-    location[1] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][2];
-
-    // check that a move has been made otherwise return -1
+    // check that a move has been made otherwise return UNKNOWN_LOCATION
     if (roundsPlayed > 0) { 
+        char location[3];
+        location[2] = '\0';
+
+
+        location[0] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][1];
+        location[1] = currentView->seperatedPP[((roundsPlayed-1)*5)+player][2];
+
         return translateLocationID(location);
     } else {
         return UNKNOWN_LOCATION;
