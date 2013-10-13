@@ -11,7 +11,7 @@
 //A sample test program HunterView.h
 int main() {
         //int i;
-	/*playerMessage messages[] = {};
+	playerMessage messages[] = {};
 
 	printf("Test basic empty initialisation\n");
 	HunterView hv = newHunterView("", messages);
@@ -23,11 +23,11 @@ int main() {
         assert(getLocation(hv,PLAYER_LORD_GODALMING) == UNKNOWN_LOCATION);
         
 	disposeHunterView(hv);
-        printf("passed\n")*/;
+        printf("passed\n");
 	
         playerMessage messages2[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
 	printf("Test for Dracula trail and basic functions\n");
-	HunterView hv = newHunterView("GST.... SAO.... HZU.... MBB.... DC?....", messages2);
+	hv = newHunterView("GST.... SAO.... HZU.... MBB.... DC?....", messages2);
 	assert(getCurrentPlayer(hv) == PLAYER_LORD_GODALMING);
     printf("round = %d\n", getRound(hv));
 	assert(getRound(hv) == 1);

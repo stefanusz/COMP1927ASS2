@@ -202,8 +202,6 @@ int getHealth(HunterView currentView, PlayerID player) {
             if (locDracula == CASTLE_DRACULA) {
                 health += LIFE_GAIN_CASTLE_DRACULA;
             }
-
-
         }
     }
     return health;
@@ -226,6 +224,9 @@ int getHealth(HunterView currentView, PlayerID player) {
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView){
+    if (currentView->totalTurns == 0)
+        return PLAYER_LORD_GODALMING;
+
     char lastPlayer = currentView->seperatedPP[currentView->totalTurns-1][0];
     printf("lastPlayer = *%c*\n", lastPlayer);
     if (lastPlayer == 'G') {
@@ -241,12 +242,12 @@ PlayerID getCurrentPlayer (HunterView currentView){
     }
 }
 
-// #####      #     ####   #####    ####    ####   ######
-// #    #     #    #       #    #  #    #  #       #
-// #    #     #     ####   #    #  #    #   ####   #####
-// #    #     #         #  #####   #    #       #  #
-// #    #     #    #    #  #       #    #  #    #  #
-// #####      #     ####   #        ####    ####   ######
+// #####    #    ####   #####    ####    ####   ######
+// #    #   #   #       #    #  #    #  #       #
+// #    #   #    ####   #    #  #    #   ####   #####
+// #    #   #        #  #####   #    #       #  #
+// #    #   #   #    #  #       #    #  #    #  #
+// #####    #    ####   #        ####    ####   ######
      
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
