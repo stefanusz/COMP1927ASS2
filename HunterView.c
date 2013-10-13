@@ -6,6 +6,8 @@
 #include <string.h>
 
 #define PLAYLEN 7
+#define TRUE 1
+#define FALSE 0
 
 static LocationID translateLocationID(char* locationCode);
      
@@ -17,6 +19,9 @@ struct hunterView {
     int totalTurns; 
     // all the pastPlays(PP) seperated, so that they can be individually accessed through the array
     char** seperatedPP;
+
+    // if died[player] then the player has died within that turn
+    int died[NUM_PLAYERS];
 };
 
 // #    #  ######  #    # #     #  #    #  #    #   #####  ######  #####
@@ -63,6 +68,11 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     
     for (i=0; i<hunterView->totalTurns; i++) {
         printf ("[%d]*%s*\n", i, hunterView->seperatedPP[i]);
+    }
+
+    // intialise all values to 0 (false)
+    for (i = 0; i < NUM_PLAYERS; i++) {
+        hunterView->died[i] = FALSE;
     }
 
     //hunterView->score = calculateScore(finalPlay);
@@ -126,10 +136,6 @@ int getHealth(HunterView currentView, PlayerID player) {
             location[0] = currentView->seperatedPP[(i*5)+player][1];
             location[1] = currentView->seperatedPP[(i*5)+player][2];
 
-            // check if hunter is in the hospital and reset hp if true
-            if (translateLocationID(location) == ST_JOSEPH_AND_ST_MARYS) {
-                health = GAME_START_HUNTER_LIFE_POINTS;
-            }
 
             // if the hunter hasn't moved, health += 3
             if (strcmp(location, pastLocation) == 0) {
@@ -149,6 +155,13 @@ int getHealth(HunterView currentView, PlayerID player) {
                 if (encounter == 'D')
                     health -= LIFE_LOSS_DRACULA_ENCOUNTER;
             }
+            // check if hunter is in the hospital and reset hp if true
+            if (health < 1) {
+                currentView->died[player] = TRUE;
+                health = GAME_START_HUNTER_LIFE_POINTS;
+            } else {
+                currentView->died[player] = FALSE;
+            }
         }
     }
 
@@ -167,6 +180,13 @@ int getHealth(HunterView currentView, PlayerID player) {
 
             LocationID locDracula = translateLocationID(location);
 
+            // handle doubleback
+            if (locDracula >= 74 && locDracula <= 78) {
+                LocationID history[TRAIL_SIZE];
+                getHistory(currentView, PLAYER_DRACULA, history);
+                locDracula = history[location[1] - '0'];
+            }
+
             // Reduce health by 10 if a hunter was encountered
             if (locDracula >= 0 && locDracula <= 70 && locDracula != CASTLE_DRACULA) {
                 health -= LIFE_LOSS_HUNTER_ENCOUNTER;
@@ -182,6 +202,7 @@ int getHealth(HunterView currentView, PlayerID player) {
             if (locDracula == CASTLE_DRACULA) {
                 health += LIFE_GAIN_CASTLE_DRACULA;
             }
+
 
         }
     }
@@ -273,6 +294,10 @@ Round getRound (HunterView currentView) {
 //   TELEPORT         if Dracula apparated back to Castle Dracula
 //   LOCATION_UNKNOWN if the round number is 0
 LocationID getLocation(HunterView currentView, PlayerID player) {
+
+    // check whether player has died within the turn, set location if died
+    if (currentView->died[player] == TRUE)
+        return ST_JOSEPH_AND_ST_MARYS;
 
     char location[3];
     location[2] = '\0';

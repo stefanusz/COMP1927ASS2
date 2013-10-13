@@ -25,7 +25,7 @@ void testHunterView(void) {
                            "GTOTD..";
         HunterView hv = newHunterView(pastPlays, messages);
 
-        
+        printf("health = %d\n", (getHealth(hv,PLAYER_LORD_GODALMING)));
         assert(getHealth(hv,PLAYER_LORD_GODALMING)== GAME_START_HUNTER_LIFE_POINTS);
         assert(getLocation(hv,PLAYER_LORD_GODALMING) == ST_JOSEPH_AND_ST_MARYS);
         
@@ -80,6 +80,7 @@ void testHunterView(void) {
         HunterView hv = newHunterView(pastPlays, messages);
 
         assert(getHealth(hv,PLAYER_LORD_GODALMING)== GAME_START_HUNTER_LIFE_POINTS);
+        printf("location = %d\n", getLocation(hv,PLAYER_LORD_GODALMING));
         assert(getLocation(hv,PLAYER_LORD_GODALMING) == SARAJEVO);
         
         LocationID history[TRAIL_SIZE];
