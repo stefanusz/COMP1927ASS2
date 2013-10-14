@@ -18,14 +18,20 @@ typedef struct _node{
   int type;
 }node;     
      
+typedef struct _playerStruct {
+    int health;
+    int numDied;
+}playerStruct;     
+
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int score;
-    PlayerID player;
+    
     // stores the total amount of turns that have occured within the game
     int totalTurns; 
     // all the pastPlays(PP) seperated, so that they can be individually accessed through the array
     char** seperatedPP;
+    playerStruct[NUM_PLAYERS];
 
     // if died[player] then the player has died within that turn
     int died[NUM_PLAYERS];
@@ -43,6 +49,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->score = GAME_START_SCORE;
     hunterView->player = PLAYER_LORD_GODALMING;
     
+    
     int i;
     int counter;
     
@@ -55,11 +62,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->seperatedPP = malloc (hunterView->totalTurns * sizeof(char*));
     assert(hunterView->seperatedPP != NULL);
     
-    //THIS IS FOR SCORE FOR VANILLA.
-    int vanScore;
-    vanScore = (strlen(pastPlays)+1)/8/5;
-    vanScore = GAME_START_SCORE - vanScore;
-    hunterView->score = vanScore;
+    
+
     
     
     // Intialise a string for every turn
@@ -86,8 +90,16 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 
     // intialise all values to 0 (false)
     for (i = 0; i < NUM_PLAYERS; i++) {
+        // MALLOC FOR PLAYERSTRUCT
+        hunterView->playerStruct[i] = malloc (sizeof(struct playerStruct));
+        
         hunterView->died[i] = FALSE;
+        hunterView->playerStruct[i]->health = calculateHealth(currentView, i);
+        // initialise died to 0
+        hunterView->playerStruct[i]->numDied = 0;
+        
     }
+    
 
     //hunterView->score = calculateScore(finalPlay);
     return hunterView;
@@ -106,7 +118,13 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 // Returns a positive integer [0...366]
 int getScore(HunterView currentView){
     int score;
+    
+    score = totalTurns/5;
+    score = GAME_START_SCORE - vanScore;
     score = currentView -> score;
+    
+    player1=currentView->player->PLAYER_LORD_GODALMING->health;
+    player1= getHealth(currentView, PLAYER_LORD_GODALMING);
     return score;
 }
 
@@ -122,6 +140,10 @@ int getScore(HunterView currentView){
 // 'player' specifies which players's life/blood points to return
 //    and must be a value in the interval [0...4] (see 'player' type)
 int getHealth(HunterView currentView, PlayerID player) {
+    return currentView->playerStruct[player]->health;
+}
+
+int calculateHealth(HunterView currentView, PlayerID player) {
 
     int i,k;
     int health;
@@ -172,6 +194,7 @@ int getHealth(HunterView currentView, PlayerID player) {
             // check if hunter is in the hospital and reset hp if true
             if (health < 1) {
                 currentView->died[player] = TRUE;
+                currentView->playerStruct[player]->numDied++;
                 health = GAME_START_HUNTER_LIFE_POINTS;
             } else {
                 currentView->died[player] = FALSE;
