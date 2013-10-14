@@ -117,33 +117,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     return hunterView;
 }
 
-static int calculateScore (HunterView currentView) {
-    int score;
-    
-    score = currentView->totalTurns/5;
-    score = GAME_START_SCORE - score;
-   
-    //FOR PLAYERS THAT HAVE DIED.
-    
-    int i;
-    int totalDied = 0;
-    
-    for(i=0; i<NUM_PLAYERS; i++){
-        
-        totalDied += currentView -> playerStruct[i] -> numDied;
-    }
-    printf("stuck3\n");
-    totalDied *= SCORE_LOSS_HUNTER_HOSPITAL;
-    score = score - totalDied;
-    printf("stuck5\n");
-    for (i=0; i<getRound(currentView); i++) {
-        if (currentView->seperatedPP[(i*NUM_PLAYERS)+PLAYER_DRACULA][5]=='V') {
-            score -= SCORE_LOSS_VAMPIRE_MATURES;
-        }
-    }
-    printf("stuck4\n");
-    return score;
-}
 
 //                         #####
 //  ####   ######   ##### #     #   ####    ####   #####   ######
@@ -158,6 +131,30 @@ int getScore(HunterView currentView){
     return currentView->score;    
 }
 
+
+static int calculateScore (HunterView currentView) {
+    int score;
+    
+    score = GAME_START_SCORE - currentView->totalTurns/5;
+   
+    //FOR PLAYERS THAT HAVE DIED.
+    
+    int i;
+    int totalDied = 0;
+    
+    for(i=0; i<NUM_PLAYERS; i++){
+        
+        totalDied += currentView -> playerStruct[i] -> numDied;
+    }
+    totalDied *= SCORE_LOSS_HUNTER_HOSPITAL;
+    score = score - totalDied;
+    for (i=0; i<getRound(currentView); i++) {
+        if (currentView->seperatedPP[(i*NUM_PLAYERS)+PLAYER_DRACULA][5]=='V') {
+            score -= SCORE_LOSS_VAMPIRE_MATURES;
+        }
+    }
+    return score;
+}
 
 //  ####   ######   #####  #    #  ######    ##    #        #####  #    #
 // #    #  #          #    #    #  #        #  #   #          #    #    #
