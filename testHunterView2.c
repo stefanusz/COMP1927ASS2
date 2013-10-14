@@ -19,7 +19,7 @@ int main() {
 	assert(getRound(hv) == 0);
 	assert(getHealth(hv, PLAYER_DR_SEWARD) == GAME_START_HUNTER_LIFE_POINTS);
 	assert(getHealth(hv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
-        //assert(getScore(hv) == GAME_START_SCORE);
+        assert(getScore(hv) == GAME_START_SCORE);
         assert(getLocation(hv,PLAYER_LORD_GODALMING) == UNKNOWN_LOCATION);
         
 	disposeHunterView(hv);

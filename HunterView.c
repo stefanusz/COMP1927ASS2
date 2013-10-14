@@ -9,8 +9,17 @@
 #define TRUE 1
 #define FALSE 0
 
+#define LAND 0
+#define SEA 1
+#define RAIL 2
+
 static LocationID translateLocationID(char* locationCode);
+static int calculateScore (HunterView currentView);
+static int calculateHealth (HunterView currentView, PlayerID player);
+//static void makeMap(HunterView g);
      
+typedef struct _node *Node;
+typedef struct _playerStruct *playerStruct;
      
 typedef struct _node{
   LocationID location;
@@ -21,7 +30,7 @@ typedef struct _node{
 typedef struct _playerStruct {
     int health;
     int numDied;
-}playerStruct;     
+}ps;     
 
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
@@ -31,10 +40,13 @@ struct hunterView {
     int totalTurns; 
     // all the pastPlays(PP) seperated, so that they can be individually accessed through the array
     char** seperatedPP;
-    playerStruct[NUM_PLAYERS];
+    playerStruct playerStruct[NUM_PLAYERS];
 
     // if died[player] then the player has died within that turn
     int died[NUM_PLAYERS];
+
+    Node        trail[NUM_PLAYERS]; 
+    Node        connections[NUM_MAP_LOCATIONS]; 
 };
 
 // #    #  ######  #    # #     #  #    #  #    #   #####  ######  #####
@@ -47,24 +59,19 @@ struct hunterView {
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( *hunterView ) );
     hunterView->score = GAME_START_SCORE;
-    hunterView->player = PLAYER_LORD_GODALMING;
-    
     
     int i;
     int counter;
     
     counter = 0;
     hunterView->totalTurns = (strlen(pastPlays)+1)/(PLAYLEN+1);
-    
+
+
     // Initialise the 2D array of strings
     // http://stackoverflow.com/a/14583642
     // Initialise an array of pointers for the  amount of total turns
     hunterView->seperatedPP = malloc (hunterView->totalTurns * sizeof(char*));
     assert(hunterView->seperatedPP != NULL);
-    
-    
-
-    
     
     // Intialise a string for every turn
     for(i = 0; i < hunterView->totalTurns; i++) {
@@ -88,24 +95,55 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
         printf ("[%d]*%s*\n", i, hunterView->seperatedPP[i]);
     }
 
+
     // intialise all values to 0 (false)
     for (i = 0; i < NUM_PLAYERS; i++) {
         // MALLOC FOR PLAYERSTRUCT
-        hunterView->playerStruct[i] = malloc (sizeof(struct playerStruct));
+        hunterView->playerStruct[i] = malloc(sizeof(struct _playerStruct));
         
         hunterView->died[i] = FALSE;
-        hunterView->playerStruct[i]->health = calculateHealth(currentView, i);
+
+        hunterView->playerStruct[i]->health = calculateHealth(hunterView, i);
         // initialise died to 0
         hunterView->playerStruct[i]->numDied = 0;
         
     }
     
-
-    //hunterView->score = calculateScore(finalPlay);
+    // store latest score into struct
+        printf("stuck1\n");
+    hunterView->score = calculateScore(hunterView);
+        printf("stuck2\n");
+    
     return hunterView;
 }
 
-//static int calculateScore (finalPlay);
+static int calculateScore (HunterView currentView) {
+    int score;
+    
+    score = currentView->totalTurns/5;
+    score = GAME_START_SCORE - score;
+   
+    //FOR PLAYERS THAT HAVE DIED.
+    
+    int i;
+    int totalDied = 0;
+    
+    for(i=0; i<NUM_PLAYERS; i++){
+        
+        totalDied += currentView -> playerStruct[i] -> numDied;
+    }
+    printf("stuck3\n");
+    totalDied *= SCORE_LOSS_HUNTER_HOSPITAL;
+    score = score - totalDied;
+    printf("stuck5\n");
+    for (i=0; i<getRound(currentView); i++) {
+        if (currentView->seperatedPP[(i*NUM_PLAYERS)+PLAYER_DRACULA][5]=='V') {
+            score -= SCORE_LOSS_VAMPIRE_MATURES;
+        }
+    }
+    printf("stuck4\n");
+    return score;
+}
 
 //                         #####
 //  ####   ######   ##### #     #   ####    ####   #####   ######
@@ -117,15 +155,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 //Get the current score
 // Returns a positive integer [0...366]
 int getScore(HunterView currentView){
-    int score;
-    
-    score = totalTurns/5;
-    score = GAME_START_SCORE - vanScore;
-    score = currentView -> score;
-    
-    player1=currentView->player->PLAYER_LORD_GODALMING->health;
-    player1= getHealth(currentView, PLAYER_LORD_GODALMING);
-    return score;
+    return currentView->score;    
 }
 
 
@@ -200,12 +230,12 @@ int calculateHealth(HunterView currentView, PlayerID player) {
                 currentView->died[player] = FALSE;
             }
         }
-    }
+    
 
     // ================================================
     //                   DRACULA
     // ================================================
-    if (player == PLAYER_DRACULA) {
+    } else {//(player == PLAYER_DRACULA) {
         health = GAME_START_BLOOD_POINTS;
 
         // loop through all the plays for the specified player
@@ -294,9 +324,9 @@ void disposeHunterView( HunterView toBeDeleted ) {
 }
 
 
-<<<<<<< HEAD
-//CREATE MAP
 
+//CREATE MAP
+/*
 static Node newPlace(LocationID place, int connectionType){
   Node newNode = malloc(sizeof(struct _node));
   assert(newNode != NULL);
@@ -540,9 +570,9 @@ static void makeMap(HunterView g){
     addLink(g, PRAGUE, VIENNA, RAIL );
     addLink(g, PRAGUE, VIENNA, LAND );
 
-}
+}*/
 
-=======
+
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
 //  #    #  #          #    #    #  #    #  #    #  ##   #  #    #
 //  #       #####      #    #    #  #    #  #    #  # #  #  #    #
@@ -857,4 +887,4 @@ static LocationID translateLocationID (char* locationCode) {
         return UNKNOWN_LOCATION;
     }
 }
->>>>>>> b4a45021ea2da29e72e6818d0c4fcd2bf813fd18
+
