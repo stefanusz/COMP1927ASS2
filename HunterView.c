@@ -584,7 +584,7 @@ static void makeMap(HunterView g){
                     exit(0);
                 }
 
-                printf("success number %d\n", i );
+                //printf("success number %d", i );
                 n = n->next; 
             } 
 
@@ -624,8 +624,8 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     // GET WHERE CURRENT PLAYER IS. 
 
 
-    Node current = g->connections[from];
-
+    Node current = currentView->connections[from];
+   
     // MEANS THIS IS HUNTER
     if(player >= 0 && player <= 3){
 
@@ -633,9 +633,16 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     
                 if (road == TRUE || rail == TRUE || sea == TRUE){
 
-                     return 1;
+                     if(current->type == LAND){
+
+                     }else if(current->type == SEA){
+
+                     }else if(current->type == RAIL){
+
+                     }
+
                 }else{
-                    curr = curr -> next;
+                    current = current -> next;
                 }
         }
 
