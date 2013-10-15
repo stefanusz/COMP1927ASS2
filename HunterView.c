@@ -604,7 +604,7 @@ static void makeMap(HunterView g){
  #    #  #    #  #   ##  #   ##  #       #    #     #    #       #    #
   ####    ####   #    #  #    #  ######   ####      #    ######  #####
 
-
+*/
 //Functions that query the map to find information about connectivity
 
 //This function returns an array of LocationID that represent all locations that are connected 
@@ -620,9 +620,35 @@ static void makeMap(HunterView g){
 LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
                                 PlayerID player, Round round, int road, int rail, int sea){
 
+    // TAKEN FROM GRAPH.C WEEK 9.
+    // GET WHERE CURRENT PLAYER IS. 
+
+
+    Node current = g->connections[from];
+
+    // MEANS THIS IS HUNTER
+    if(player >= 0 && player <= 3){
+
+        while(current != NULL){
+    
+                if (road == TRUE || rail == TRUE || sea == TRUE){
+
+                     return 1;
+                }else{
+                    curr = curr -> next;
+                }
+        }
+
+    }else{
+        // TO DETERMINE FOR DRACULA.
+    }
+   
+
+    return 0;
+
   LocationID *array = FALSE; 
   return array;
-} */
+} 
 
 
 
