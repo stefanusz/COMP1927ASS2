@@ -16,7 +16,7 @@
 static LocationID translateLocationID(char* locationCode);
 static int calculateScore (HunterView currentView);
 static int calculateHealth (HunterView currentView, PlayerID player);
-//static void makeMap(HunterView g);
+static void makeMap(HunterView g);
      
 typedef struct _node *Node;
 typedef struct _playerStruct *playerStruct;
@@ -113,6 +113,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
         printf("stuck1\n");
     hunterView->score = calculateScore(hunterView);
         printf("stuck2\n");
+
+        makeMap(hunterView);
     
     return hunterView;
 }
@@ -323,7 +325,7 @@ void disposeHunterView( HunterView toBeDeleted ) {
 
 
 //CREATE MAP
-/*
+
 static Node newPlace(LocationID place, int connectionType){
   Node newNode = malloc(sizeof(struct _node));
   assert(newNode != NULL);
@@ -567,7 +569,7 @@ static void makeMap(HunterView g){
     addLink(g, PRAGUE, VIENNA, RAIL );
     addLink(g, PRAGUE, VIENNA, LAND );
 
-}*/
+}
 
 
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
