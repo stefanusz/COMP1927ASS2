@@ -17,6 +17,8 @@ static LocationID translateLocationID(char* locationCode);
 static int calculateScore (HunterView currentView);
 static int calculateHealth (HunterView currentView, PlayerID player);
 static void makeMap(HunterView g);
+static void showGraph(HunterView g);
+
      
 typedef struct _node *Node;
 typedef struct _playerStruct *playerStruct;
@@ -110,11 +112,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     }
     
     // store latest score into struct
-        printf("stuck1\n");
+        
     hunterView->score = calculateScore(hunterView);
-        printf("stuck2\n");
+       
 
         makeMap(hunterView);
+        showGraph(hunterView);
+        
+       
     
     return hunterView;
 }
@@ -344,7 +349,7 @@ static void addLink(HunterView currentView, LocationID start, LocationID end, in
   endNode->next = currentView->connections[start];
   currentView->connections[start] = endNode;      
   
-  //updating lsit for end node
+  //updating list for end node
   startNode->next = currentView->connections[end];
   currentView->connections[end] = startNode;      
       
@@ -568,8 +573,71 @@ static void makeMap(HunterView g){
     //CZECH THIS OUT!
     addLink(g, PRAGUE, VIENNA, RAIL );
     addLink(g, PRAGUE, VIENNA, LAND );
+    
+   
 
 }
+
+
+//Useful for debugging
+static void showGraph(HunterView g) { 
+    assert(g != NULL); 
+    
+    int i; 
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) { 
+        //printf("%d\n", i);
+
+            Node n = g->connections[i]; 
+            while (n != NULL) { 
+                printf("cities%d-%d ",i,n->location); 
+                printf("TYPE IS %d\n",n->type); 
+                if(n->type == LAND){
+                    printf("L ");
+                } else if(n->type == SEA){
+                    printf("S ");
+                } else {
+                    printf("ERROR NO SUCH TYPE\n");
+                    //exit(0);
+                }
+                n = n->next; 
+            } 
+
+            if (g->connections [i] != NULL){
+            printf("\n"); 
+            } 
+        }
+
+
+} 
+
+/*
+  ####    ####   #    #  #    #  ######   ####    #####  ######  #####
+ #    #  #    #  ##   #  ##   #  #       #    #     #    #       #    #
+ #       #    #  # #  #  # #  #  #####   #          #    #####   #    #
+ #       #    #  #  # #  #  # #  #       #          #    #       #    #
+ #    #  #    #  #   ##  #   ##  #       #    #     #    #       #    #
+  ####    ####   #    #  #    #  ######   ####      #    ######  #####
+
+
+//Functions that query the map to find information about connectivity
+
+//This function returns an array of LocationID that represent all locations that are connected 
+//to the given LocationID. 
+//road, rail and sea are connections should only be considered if the road, rail, sea parameters 
+//are TRUE.
+//The size of the array should be stored in the variable pointed to by numLocations
+//The array can be in any order but must contain unique entries
+//Your function must take into account the round and player id for rail travel
+//Your function must take into account that dracula can't move to the hospital or travel by rail
+//but need not take into account draculas trail
+//Any location that the player is currently in, should be included.
+LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
+                                PlayerID player, Round round, int road, int rail, int sea){
+
+  LocationID *array = FALSE; 
+  return array;
+} */
+
 
 
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
