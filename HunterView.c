@@ -12,6 +12,7 @@
 #define LAND 0
 #define SEA 1
 #define RAIL 2
+#define ANY 1588
 
 static LocationID translateLocationID(char* locationCode);
 static int calculateScore (HunterView currentView);
@@ -629,16 +630,69 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     current = current->next;
     
     result[0]=from;
+    int checker;
+    int counter;
+    // TO CHECK AND GIVE INDICATION WHETHER ITS ROAD, RAIL OR SEA.
+    if(road == TRUE){
+        checker = LAND;
+    }else if(sea == TRUE){
+        checker = SEA;
+    }else if(road == TRUE && sea == TRUE){
+        checker = ANY;
+    }
+
+    counter = 1;
+
     // MEANS THIS IS HUNTER
     if((road == TRUE && sea == FALSE) || 
        (road == FALSE && sea == TRUE) || 
        (road == TRUE && sea == TRUE) ) 
     {
-        if(current->next-> type == LAND || 
-            current->next-> type == SEA ){
+        
+
+        if(checker == ANY){
+
+            while(current != NULL){
+
+                if(current->type != RAIL){
+                    result[counter] = current->location;
+                    counter++;
+                    current = current -> next;
+
+                    // IF PLAYER DRACULA CANT MOVE TO HOSPITAL
+                    // IF PLACE IS HOSPITAL THEN DONT ADD INTO ARRAY.
+
+                    // TO DO HERE.
+                }
+                
+            }
+
+            *numLocations = counter;
 
 
+        }else{
+
+
+
+            while(current != NULL){
+
+                if (current->type == checker)
+                {
+                    result[counter] = current->location;
+                    counter++;
+                    current = current -> next;
+
+                    // IF PLAYER DRACULA CANT MOVE TO HOSPITAL
+                    // IF PLACE IS HOSPITAL THEN DONT ADD INTO ARRAY.
+
+                    // TO DO HERE.
+                }
+            }
+
+            *numLocations = counter;
         }
+        
+
 
     }else if(rail == TRUE && player != PLAYER_DRACULA){
 
@@ -650,17 +704,35 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
         railSum = sum % 4;
 
         if(railSum == 0){
-
+            // NO MOVE AVAILABLE
         }else if(railSum == 1){
+
+            // MOVE ONE AWAY BY RAIL
+
+            while(current != NULL){
+
+                if (current->type == RAIL)
+                {
+                    result[counter] = current->location;
+                    counter++;
+                    current = current -> next;
+                }
+            
+
+            *numLocations = counter;
+            }
 
         }else if(railSum == 2){
 
+            // MOVE UP TO 2 PLACES BY RAIL
+
         }else if(railSum == 3){
+
+            // MOVE UP TO 3 PLACES BY RAIL
 
         }
 
-
-    }
+  }
     
   
   return result;
