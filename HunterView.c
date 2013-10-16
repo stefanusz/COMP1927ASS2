@@ -112,7 +112,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     }
     
     // store latest score into struct
-        
     hunterView->score = calculateScore(hunterView);
        
 
@@ -323,14 +322,24 @@ PlayerID getCurrentPlayer (HunterView currentView){
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 void disposeHunterView( HunterView toBeDeleted ) {
-    //COMPLETE THIS IMPLEMENTATION
-    free( toBeDeleted );
+    int i;
+
+    // Free separtatedPP
+    for(i = 0; i <  toBeDeleted->totalTurns; i++) {
+        free(toBeDeleted->seperatedPP[i]);
+    }
+    free(toBeDeleted->seperatedPP);
+
+    // Free Player struct
+    for (i = 0; i < NUM_PLAYERS; i++) {
+        free(toBeDeleted->playerStruct[i]);
+    }    
+    // Free HunterView struct
+    free(toBeDeleted);
 }
 
 
-
 //CREATE MAP
-
 static Node newPlace(LocationID place, int connectionType){
   Node newNode = malloc(sizeof(struct _node));
   assert(newNode != NULL);
@@ -562,7 +571,6 @@ static void makeMap(HunterView g){
  #    #  #    #  #    #  ##  ##          #    #  #    #  #
   ####   #    #   ####   #    # #######  #    #  #    #  #
 */
-
  void showGraph(HunterView g) { 
     assert(g != NULL); 
     
@@ -595,7 +603,6 @@ static void makeMap(HunterView g){
            
     }
 } 
-
 /*
   ####    ####   #    #  #    #  ######   ####    #####  ######  #####
  #    #  #    #  ##   #  ##   #  #       #    #     #    #       #    #
@@ -664,8 +671,7 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     
   
   return result;
-} 
-
+}
 
 
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
