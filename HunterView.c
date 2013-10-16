@@ -623,38 +623,47 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     // TAKEN FROM GRAPH.C WEEK 9.
     // GET WHERE CURRENT PLAYER IS. 
 
+    LocationID *result = malloc(sizeof(int)*NUM_MAP_LOCATIONS);
 
     Node current = currentView->connections[from];
-   
-    // MEANS THIS IS HUNTER
-    if(player >= 0 && player <= 3){
-
-        while(current != NULL){
+    current = current->next;
     
-                if (road == TRUE || rail == TRUE || sea == TRUE){
+    result[0]=from;
+    // MEANS THIS IS HUNTER
+    if((road == TRUE && sea == FALSE) || 
+       (road == FALSE && sea == TRUE) || 
+       (road == TRUE && sea == TRUE) ) 
+    {
+        if(current->next-> type == LAND || 
+            current->next-> type == SEA ){
 
-                     if(current->type == LAND){
 
-                     }else if(current->type == SEA){
-
-                     }else if(current->type == RAIL){
-
-                     }
-
-                }else{
-                    current = current -> next;
-                }
         }
 
-    }else{
-        // TO DETERMINE FOR DRACULA.
+    }else if(rail == TRUE && player != PLAYER_DRACULA){
+
+        int railSum;
+        int sum;
+
+        sum = round + player;
+
+        railSum = sum % 4;
+
+        if(railSum == 0){
+
+        }else if(railSum == 1){
+
+        }else if(railSum == 2){
+
+        }else if(railSum == 3){
+
+        }
+
+
     }
-   
-
-    return 0;
-
-  LocationID *array = FALSE; 
-  return array;
+    
+  
+  return result;
 } 
 
 
