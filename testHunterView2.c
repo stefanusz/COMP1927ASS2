@@ -10,7 +10,9 @@
 
 //A sample test program HunterView.h
 int main() {
-        int i;
+
+   int i;
+
 	playerMessage messages[] = {};
 
 	printf("Test basic empty initialisation\n");
