@@ -645,14 +645,14 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     counter = 1;
 
     // MEANS THIS IS HUNTER
-    if((road == TRUE && sea == FALSE) || 
-       (road == FALSE && sea == TRUE) || 
-       (road == TRUE && sea == TRUE) ) 
+    if((road == TRUE && sea == FALSE ) || 
+       (road == FALSE && sea == TRUE ) || 
+       (road == TRUE && sea == TRUE  ) ) 
     {
         
         //printf ("it comes here\n");
         if(checker == ANY){
-
+            
             while(current != NULL){
 
                 if(current->type != RAIL){
@@ -690,7 +690,7 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 
         }else{
 
-
+           
             //printf ("it comes here\n");
             while(current != NULL){
 
@@ -723,12 +723,14 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
                 }
                 current = current -> next;
             }
-            printf ("COUNTER %d\n", counter);
+            //printf ("COUNTER %d\n", counter);
             *numLocations = counter;
 
 
         }
         
+        // FOR DEBUGGING PURPOSES.
+        /*
             int counter99;
 
             for(counter99=0; counter99< NUM_MAP_LOCATIONS; counter99++){
@@ -740,28 +742,46 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
                 
             }
             printf("\n");
-
+        */
     }else if(rail == TRUE && player != PLAYER_DRACULA){
 
         int railSum;
         int sum;
- printf("COUNTER INSIDE RAIL IS %d", counter);
+
         sum = round + player;
 
         railSum = sum % 4;
 
+        printf("railSum is %d\n", railSum );
+
+
+        
         if(railSum == 0){
             // NO MOVE AVAILABLE
+            *numLocations = counter;
+            return result;
         }else if(railSum == 1){
-
+            printf("COMES HERE2\n");
             // MOVE ONE AWAY BY RAIL
 
             while(current != NULL){
 
                 if (current->type == RAIL)
                 {
+                    int arrayChecker;
+                    int somethingEqual = FALSE;
+                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
+                        if (result[arrayChecker] == current->location)
+                        {
+                            somethingEqual = TRUE;
+                        }
+                    }
+
+                    if (!somethingEqual) {
                     result[counter] = current->location;
                     counter++;
+                    }
+                    
                     
                 }
             current = current -> next;
@@ -773,11 +793,74 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 
             // MOVE UP TO 2 PLACES BY RAIL
 
+            while(current != NULL){
+
+                if (current->type == RAIL)
+                {
+                    int arrayChecker;
+                    int somethingEqual = FALSE;
+                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
+                        if (result[arrayChecker] == current->location)
+                        {
+                            somethingEqual = TRUE;
+                        }
+                    }
+
+                    if (!somethingEqual) {
+                    result[counter] = current->location;
+                    counter++;
+                    }
+                    
+                    
+                }
+            current = current -> next;
+
+            *numLocations = counter;
+            }
+
         }else if(railSum == 3){
 
             // MOVE UP TO 3 PLACES BY RAIL
 
+            while(current != NULL){
+
+                if (current->type == RAIL)
+                {
+                    int arrayChecker;
+                    int somethingEqual = FALSE;
+                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
+                        if (result[arrayChecker] == current->location)
+                        {
+                            somethingEqual = TRUE;
+                        }
+                    }
+
+                    if (!somethingEqual) {
+                    result[counter] = current->location;
+                    counter++;
+                    }
+                    
+                    
+                }
+            current = current -> next;
+
+            *numLocations = counter;
+            }
+
         }
+        
+        // FOR DEBUGGING PURPOSES.
+        int counter99;
+
+            for(counter99=0; counter99< NUM_MAP_LOCATIONS; counter99++){
+                //printf("number zero is %d\n", result[0]);
+
+                if(result[counter99] != 0){
+                    printf("the CITY inside array[%d] result is %d\n", counter99, result[counter99]);
+                }
+                
+            }
+        printf("\n");
 
   }
     

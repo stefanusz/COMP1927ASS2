@@ -83,9 +83,10 @@ int main() {
 	int seen[MAX_LOCATION], *edges;
 	hv = newHunterView("", messages);	
 	
-        int size;
+    int size;
+    memset(seen, 0, MAX_LOCATION*sizeof(int));
 	edges = connectedLocations(hv,&size, GALATZ,PLAYER_LORD_GODALMING,0,1,0,0);
-	memset(seen, 0, MAX_LOCATION*sizeof(int));
+	
 	for (i = 0; i< size ; i++) {
 		seen[edges[i]] = 1;
 	}
@@ -109,7 +110,7 @@ int main() {
         assert(size == 7);
         free(edges);
 
-       
+      
 
 	edges = connectedLocations(hv, &size,ATHENS,PLAYER_LORD_GODALMING,0,0,1,0);
         assert(size == 1);
