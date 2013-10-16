@@ -18,7 +18,7 @@ static LocationID translateLocationID(char* locationCode);
 static int calculateScore (HunterView currentView);
 static int calculateHealth (HunterView currentView, PlayerID player);
 static void makeMap(HunterView g);
-static void showGraph(HunterView g);
+//static void showGraph(HunterView g);
 
      
 typedef struct _node *Node;
@@ -118,7 +118,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
        
 
         makeMap(hunterView);
-        showGraph(hunterView);
+        //showGraph(hunterView);
         
        
     
@@ -620,7 +620,8 @@ static void makeMap(HunterView g){
 //Any location that the player is currently in, should be included.
 LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
                                 PlayerID player, Round round, int road, int rail, int sea){
-
+    // TRUE 1
+    // FALSE 0
     // TAKEN FROM GRAPH.C WEEK 9.
     // GET WHERE CURRENT PLAYER IS. 
 
@@ -649,21 +650,38 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
        (road == TRUE && sea == TRUE) ) 
     {
         
-
+        //printf ("it comes here\n");
         if(checker == ANY){
 
             while(current != NULL){
 
                 if(current->type != RAIL){
-                    result[counter] = current->location;
+
+
+                    int arrayChecker;
+                    int somethingEqual = FALSE;
+                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
+                        if (result[arrayChecker] == current->location)
+                        {
+                            somethingEqual = TRUE;
+                        }
+                    }
+
+                    if (!somethingEqual) {
+                        result[counter] = current->location;
                     counter++;
-                    current = current -> next;
+                    }
 
-                    // IF PLAYER DRACULA CANT MOVE TO HOSPITAL
-                    // IF PLACE IS HOSPITAL THEN DONT ADD INTO ARRAY.
 
-                    // TO DO HERE.
+
+                    if(player == PLAYER_DRACULA && current->location == ST_JOSEPH_AND_ST_MARYS){
+                        // TO SKIP THIS PART. 
+                        current = current -> next;
+                    }
+                    
                 }
+
+                current = current -> next;
                 
             }
 
@@ -673,32 +691,61 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
         }else{
 
 
-
+            //printf ("it comes here\n");
             while(current != NULL){
 
                 if (current->type == checker)
                 {
-                    result[counter] = current->location;
-                    counter++;
-                    current = current -> next;
+                    //printf ("it comes here counter %d\n", counter);
+                    // CHECK WHETHER THERE IS ANY DUPLICATE OR NOT.
+                    
+                    int arrayChecker;
+                    int somethingEqual = FALSE;
+                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
+                        if (result[arrayChecker] == current->location)
+                        {
+                            somethingEqual = TRUE;
+                        }
+                    }
 
-                    // IF PLAYER DRACULA CANT MOVE TO HOSPITAL
-                    // IF PLACE IS HOSPITAL THEN DONT ADD INTO ARRAY.
-
-                    // TO DO HERE.
+                    if (!somethingEqual) {
+                        result[counter] = current->location;
+                        counter++;
+                    }
+                    
+                    if(player == PLAYER_DRACULA && current->location == ST_JOSEPH_AND_ST_MARYS){
+                        // TO SKIP THIS PART. 
+                        //printf ("it comes here BLA BLA %d\n", counter);
+                        current = current -> next;
+                    }
+                    
+                    
                 }
+                current = current -> next;
             }
-
+            printf ("COUNTER %d\n", counter);
             *numLocations = counter;
+
+
         }
         
+            int counter99;
 
+            for(counter99=0; counter99< NUM_MAP_LOCATIONS; counter99++){
+                //printf("number zero is %d\n", result[0]);
+
+                if(result[counter99] != 0){
+                    printf("the CITY inside array[%d] result is %d\n", counter99, result[counter99]);
+                }
+                
+            }
+            printf("\n");
 
     }else if(rail == TRUE && player != PLAYER_DRACULA){
 
         int railSum;
         int sum;
-
+ printf("COUNTER INSIDE RAIL IS %d", counter);
         sum = round + player;
 
         railSum = sum % 4;
@@ -715,9 +762,9 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
                 {
                     result[counter] = current->location;
                     counter++;
-                    current = current -> next;
+                    
                 }
-            
+            current = current -> next;
 
             *numLocations = counter;
             }

@@ -10,7 +10,7 @@
 
 //A sample test program HunterView.h
 int main() {
-        //int i;
+        int i;
 	playerMessage messages[] = {};
 
 	printf("Test basic empty initialisation\n");
@@ -78,7 +78,7 @@ int main() {
         printf("passed\n");
 	disposeHunterView(hv);
 
-/*
+
 	printf("Test for connections\n");
 	int seen[MAX_LOCATION], *edges;
 	hv = newHunterView("", messages);	
@@ -89,10 +89,14 @@ int main() {
 	for (i = 0; i< size ; i++) {
 		seen[edges[i]] = 1;
 	}
-        assert(seen[GALATZ]);
+
+	
+    assert(seen[GALATZ]);
+    
 	assert(seen[CONSTANTA] && seen[BUCHAREST] && seen[KLAUSENBURG] && seen[CASTLE_DRACULA]);
+	
 	assert(size == 5);
-        free(edges);
+    free(edges);
 	
 	//Checking Ionian seas
         edges = connectedLocations(hv, &size,IONIAN_SEA, PLAYER_LORD_GODALMING, 0 , 0, 0, 1);
@@ -105,12 +109,17 @@ int main() {
         assert(size == 7);
         free(edges);
 
+       
+
 	edges = connectedLocations(hv, &size,ATHENS,PLAYER_LORD_GODALMING,0,0,1,0);
         assert(size == 1);
+        printf("YOU ARE AWESOME!\n");
         assert(edges[0] == ATHENS);
         free(edges);
         printf("passed\n");
-        disposeHunterView(hv);*/
+        disposeHunterView(hv);
+
+
 	return 0;
 }
 
