@@ -19,6 +19,7 @@ static int calculateScore (HunterView currentView);
 static int calculateHealth (HunterView currentView, PlayerID player);
 static void makeMap(HunterView g);
 //static void showGraph(HunterView g);
+//void canReachInN(HunterView currentView, LocationID start, int type, int n, int locs[]);
 
      
 typedef struct _node *Node;
@@ -631,7 +632,6 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     // FALSE 0
     // TAKEN FROM GRAPH.C WEEK 9.
     // GET WHERE CURRENT PLAYER IS. 
-
     LocationID *result = malloc(sizeof(int)*NUM_MAP_LOCATIONS);
 
     Node current = currentView->connections[from];
@@ -737,8 +737,8 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
         }
         
         // FOR DEBUGGING PURPOSES.
-        /*
-            int counter99;
+        
+        /*    int counter99;
 
             for(counter99=0; counter99< NUM_MAP_LOCATIONS; counter99++){
                 //printf("number zero is %d\n", result[0]);
@@ -748,8 +748,8 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
                 }
                 
             }
-            printf("\n");
-        */
+            printf("\n");*/
+        
     }else if(rail == TRUE && player != PLAYER_DRACULA){
 
         int railSum;
@@ -800,59 +800,18 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 
             // MOVE UP TO 2 PLACES BY RAIL
 
-            while(current != NULL){
-
-                if (current->type == RAIL)
-                {
-                    int arrayChecker;
-                    int somethingEqual = FALSE;
-                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
-                        if (result[arrayChecker] == current->location)
-                        {
-                            somethingEqual = TRUE;
-                        }
-                    }
-
-                    if (!somethingEqual) {
-                    result[counter] = current->location;
-                    counter++;
-                    }
-                    
-                    
-                }
-            current = current -> next;
-
+           // canReachInN(HunterView currentView, Location start, Transport type, int n, int locs[])
             *numLocations = counter;
-            }
+            
 
         }else if(railSum == 3){
 
             // MOVE UP TO 3 PLACES BY RAIL
 
-            while(current != NULL){
-
-                if (current->type == RAIL)
-                {
-                    int arrayChecker;
-                    int somethingEqual = FALSE;
-                    for(arrayChecker=0; arrayChecker<counter; arrayChecker++){
-                        if (result[arrayChecker] == current->location)
-                        {
-                            somethingEqual = TRUE;
-                        }
-                    }
-
-                    if (!somethingEqual) {
-                    result[counter] = current->location;
-                    counter++;
-                    }
-                    
-                    
-                }
-            current = current -> next;
+          
 
             *numLocations = counter;
-            }
+            
 
         }
         
@@ -873,7 +832,34 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
     
   
   return result;
-}
+
+} 
+
+/*
+  ####     ##    #    #          #####   ######    ##     ####   #    #
+ #    #   #  #   ##   #          #    #  #        #  #   #    #  #    #
+ #       #    #  # #  #          #    #  #####   #    #  #       ######
+ #       ######  #  # #          #####   #       ######  #       #    #
+ #    #  #    #  #   ##          #   #   #       #    #  #    #  #    #
+  ####   #    #  #    # #######  #    #  ######  #    #   ####   #    #
+
+*/
+
+/*   //IMPLEMENT FOR TASK 3
+   
+    locs[start] = 1;
+    Node curr = currentView->connections[start];
+    while (curr != NULL){
+        if (type == curr->type || type == ANY) {
+            int m;
+            for (m = 0; m < n; m++) {
+                canReachInN(g, curr->location, type, m, locs);
+            }
+        }
+        curr = curr->next;
+    }
+    
+}*/
 
 
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
