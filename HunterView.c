@@ -5,6 +5,8 @@
 #include "HunterView.h"
 #include <string.h>
 
+
+
 #define PLAYLEN 7
 #define TRUE 1
 #define FALSE 0
@@ -18,8 +20,9 @@ static LocationID translateLocationID(char* locationCode);
 static int calculateScore (HunterView currentView);
 static int calculateHealth (HunterView currentView, PlayerID player);
 static void makeMap(HunterView g);
-//static void showGraph(HunterView g);
-//void canReachInN(HunterView currentView, LocationID start, int type, int n, int locs[]);
+void showGraph(HunterView g);
+void destroyGraph(HunterView g);
+void canReachInN(HunterView g, LocationID start, int type, int n, int locs[]);
 
      
 typedef struct _node *Node;
@@ -118,7 +121,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
        
 
         makeMap(hunterView);
-        //showGraph(hunterView);
+
         
        
     
@@ -308,8 +311,8 @@ PlayerID getCurrentPlayer (HunterView currentView){
     } else if (lastPlayer == 'H') {
         return PLAYER_MINA_HARKER;
     } else if (lastPlayer == 'M') {
-        return PLAYER_DRACULA;
-    } else {
+        return PLAYER_DRACULA
+;    } else {
         return PLAYER_LORD_GODALMING;
     }
 }
@@ -326,6 +329,8 @@ PlayerID getCurrentPlayer (HunterView currentView){
 void disposeHunterView( HunterView toBeDeleted ) {
     int i;
 
+    //showGraph(toBeDeleted);
+
     // Free separtatedPP
     for(i = 0; i <  toBeDeleted->totalTurns; i++) {
         free(toBeDeleted->seperatedPP[i]);
@@ -336,13 +341,16 @@ void disposeHunterView( HunterView toBeDeleted ) {
     for (i = 0; i < NUM_PLAYERS; i++) {
         free(toBeDeleted->playerStruct[i]);
     }    
+    //Free
+    // FREE ALL MALLOC
+    //destroyGraph(toBeDeleted);
     // Free HunterView struct
     free(toBeDeleted);
 }
 
 
 //CREATE MAP
-static Node newPlace(LocationID place, int connectionType){
+static Node newNode(LocationID place, int connectionType){
   Node newNode = malloc(sizeof(struct _node));
   assert(newNode != NULL);
   newNode->type = connectionType;
@@ -352,8 +360,8 @@ static Node newPlace(LocationID place, int connectionType){
   return newNode;
 }
 
-static void addLink(HunterView currentView, LocationID start, LocationID end, int type){
-  Node startNode = newPlace(start, type);
+static void addLink(HunterView g, LocationID start, LocationID end, int type){
+/*  Node startNode = newPlace(start, type);
   Node endNode = newPlace(end, type);
   
   //updating list for start node
@@ -362,7 +370,17 @@ static void addLink(HunterView currentView, LocationID start, LocationID end, in
   
   //updating list for end node
   startNode->next = currentView->connections[end];
-  currentView->connections[end] = startNode;      
+  currentView->connections[end] = startNode;   */
+
+    Node s = newNode (start, type);
+    Node e = newNode (end, type);
+    Node oldS = g->connections[start];
+    Node oldE = g->connections[end];
+
+    g->connections[start] = e;
+    e->next = oldS;
+    g->connections[end] = s;
+    s->next = oldE;   
       
 }
 
@@ -565,6 +583,23 @@ static void makeMap(HunterView g){
 
 }
 
+void freeList(Node start){
+    Node temp;
+    printf("%p ", start);
+    //int city = start->location;
+
+    while (start != NULL){
+
+        temp = start;
+        printf("JBARJSAJD = %d\n", temp->location);
+        start = start->next;
+        free(temp);
+
+    }
+
+    //printf("Freed city %d\n", city);
+}
+
 /* FOR DEBUGGING PURPOSES.
   ####   #    #   ####   #    #          #    #    ##    #####
  #       #    #  #    #  #    #          ##  ##   #  #   #    #
@@ -573,14 +608,16 @@ static void makeMap(HunterView g){
  #    #  #    #  #    #  ##  ##          #    #  #    #  #
   ####   #    #   ####   #    # #######  #    #  #    #  #
 */
- void showGraph(HunterView g) { 
+/*void showGraph(HunterView g) { 
     assert(g != NULL); 
     
     int i; 
     printf("TOP PAGE"); 
-    for (i = 0; i < 70; i++) { 
+    for (i = 1; i < 70; i++) { 
             Node n = g->connections[i]; 
+            //Node t;
             while (n != NULL) { 
+                //printf("PASS BY HERE %d\n", i);
                 printf("%d-%d->",i,n->location); 
                 //printf("TYPE IS %d\n",n->type); 
                 if(n->type == LAND){
@@ -595,16 +632,64 @@ static void makeMap(HunterView g){
                 }
 
                 //printf("success number %d", i );
-                n = n->next; 
+                 if (i==0) break;
+                t = n;
+                //free(t);
+                n = t->next; 
+               
             } 
-
+            freeList(n);
+             //free(t);
         if (g->connections [i] != NULL) {
-            printf("\n"); 
+            //printf("\n"); 
         } 
 
            
     }
+}*/
+
+ void showGraph(HunterView g) { 
+    assert(g != NULL); 
+    
+    int i; 
+    printf("TOP PAGE"); 
+    for (i = 0; i < 71; i++) { 
+            printf("[###]->");
+            Node n = g->connections[i]; 
+            Node h = n;
+            while (n != NULL) { 
+                printf("%d-%d",i,n->location); 
+                printf("n that segfails is %p\n", n);
+                //printf("TYPE IS %d\n",n->type); 
+                if(n->type == LAND){
+                    printf("L");
+                } else if(n->type == SEA){
+                    printf("S");
+                } else if(n->type == RAIL){
+                    printf("R");
+                    
+                } else {
+                    exit(0);
+                }
+                printf("->");
+
+                //printf("success number %d", i );
+                n = n->next; 
+            }
+            if (n == NULL) 
+                printf("NULL");
+ 
+       /* if (g->connections [i] != NULL) {
+            printf("\n"); 
+        }*/
+        printf("h is %p\n", h);
+        freeList(h); 
+
+           
+    }
 } 
+
+
 /*
   ####    ####   #    #  #    #  ######   ####    #####  ######  #####
  #    #  #    #  ##   #  ##   #  #       #    #     #    #       #    #
@@ -799,18 +884,62 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
         }else if(railSum == 2){
 
             // MOVE UP TO 2 PLACES BY RAIL
+           int *num2 = malloc(sizeof(int)*NUM_MAP_LOCATIONS);
+           canReachInN(currentView, from, RAIL, 2, num2);
+           int cityCounter;
 
-           // canReachInN(HunterView currentView, Location start, Transport type, int n, int locs[])
-            *numLocations = counter;
+           for(cityCounter=0; cityCounter<NUM_MAP_LOCATIONS; cityCounter++){
+
+                if(num2[cityCounter] == 1){
+
+                    int finalChecker;
+                    int somethingEqual;
+
+                    for(finalChecker=0; finalChecker<counter; finalChecker++){
+                            if (result[finalChecker] == current->location)
+                            {
+                                somethingEqual = TRUE;
+                            }
+                        }
+
+                        if (!somethingEqual) {
+                        result[counter] = cityCounter;
+                        counter++;
+                        }
+                }
+           }
+        
+
+        *numLocations = counter;
             
 
         }else if(railSum == 3){
 
             // MOVE UP TO 3 PLACES BY RAIL
+           int *num3 = malloc(sizeof(int)*NUM_MAP_LOCATIONS);
+           canReachInN(currentView, from, RAIL, 3, num3);
+           int cityCounter;
 
-          
+           for(cityCounter=0; cityCounter<NUM_MAP_LOCATIONS; cityCounter++){
 
-            *numLocations = counter;
+                if(num3[cityCounter] == 1){
+
+                    int finalChecker;
+                    int somethingEqual;
+
+                    for(finalChecker=0; finalChecker<counter; finalChecker++){
+                            if (result[finalChecker] == current->location)
+                            {
+                                somethingEqual = TRUE;
+                            }
+                        }
+
+                        if (!somethingEqual) {
+                        result[counter] = cityCounter;
+                        counter++;
+                        }
+                }
+           }
             
 
         }
@@ -845,10 +974,12 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 
 */
 
-/*   //IMPLEMENT FOR TASK 3
+
+void canReachInN(HunterView g, LocationID start, int type, int n, int locs[]){
+   //IMPLEMENT FOR TASK 3
    
     locs[start] = 1;
-    Node curr = currentView->connections[start];
+    Node curr = g->connections[start];
     while (curr != NULL){
         if (type == curr->type || type == ANY) {
             int m;
@@ -859,7 +990,8 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
         curr = curr->next;
     }
     
-}*/
+}
+
 
 
 //   ####   ######   #####  #####    ####   #    #  #    #  #####
@@ -1027,3 +1159,28 @@ static LocationID translateLocationID (char* locationCode) {
     }
     return UNKNOWN_LOCATION;
 }
+
+
+// DESTROY GRAPH.
+void destroyGraph(HunterView g){
+    int i;
+    Node curr;
+    Node next;
+    assert(g != NULL);
+    assert(g->connections != NULL);
+  
+    for (i = ALICANTE; i <= BLACK_SEA; i++){         
+         curr = g->connections[i];
+         while(curr!=NULL){
+            printf("%p\n I is %d\n", curr, i);
+            next = curr->next;
+
+             free(curr);
+              
+             curr=next;
+         }
+
+        // free(curr->next);
+    }
+    
+}   
